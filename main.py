@@ -4,7 +4,7 @@ frameHeight = 800
 frameWidth = 600
 window = py.display.set_mode((frameHeight, frameWidth))
 py.display.set_caption("My Game")
-# change
+
 def main():
     py.init() 
     clock = py.time.Clock() 
