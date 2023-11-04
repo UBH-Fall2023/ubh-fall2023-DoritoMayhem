@@ -1,47 +1,50 @@
-import pygame
-
-window = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("My Game")
+import pygame as py
+import math
+frameHeight = 800
+frameWidth = 600
+window = py.display.set_mode((frameHeight, frameWidth))
+py.display.set_caption("My Game")
 
 def main():
-    running = True
-    background = pygame.image.load("./images/space-background.jpg").convert()
+    py.init() 
+  
+    clock = py.time.Clock() 
+    
+    FrameHeight = 600
+    FrameWidth = 1000
+    
+    # PYGAME FRAME WINDOW 
+    py.display.set_caption("My Game") 
+    screen = py.display.set_mode((FrameWidth, FrameHeight)) 
+    
+    # IMAGE 
+    bg = py.image.load("./images/space-background.jpg").convert() 
 
-# Create Rect objects for the background and screen
-    bg_rect = background.get_rect()
-    screen_rect = window.get_rect()
-
-# Set the initial position of the background image
-    bg_rect.bottom = screen_rect.bottom
-
-# Create a clock object to control the frame rate
-    clock = pygame.time.Clock()
-
-    # Update the position of the background image
-    bg_rect.bottom = screen_rect.bottom
-    bg_rect.move_ip(0, 5)
-    while running:
-    # for loop through the event queue
-        for event in pygame.event.get(): # Check for QUIT event
-            if event.type == pygame.QUIT:
-                running = False
-    # If the background image goes off the screen, reset its position to the top of the screen
-        window.blit(background, bg_rect)
-    # Update the position of the background image and reset image
-        bg_rect.move_ip(0, 5)
-        if bg_rect.top >= screen_rect.bottom:
-            bg_rect.bottom = 0
-        # Update the display
-        pygame.display.update()
-    # calls asteroid and laser functions
-    asteroid()
-    laser()
-
-      # adds a clock and limits the frames per second
-    clock = pygame.time.Clock()
-    clock.tick(60)
-
-    pygame.quit()  
+    scroll = 0
+    tiles = math.ceil(FrameWidth / bg.get_width()) + 1
+    
+    # MAIN LOOP 
+    while True: 
+        # clock for the speed of the scrolling
+        clock.tick(60) 
+        i = 0
+        while(i < tiles): 
+            screen.blit(bg, (bg.get_width()*i + scroll, 0)) 
+            i += 1
+        # FRAME FOR SCROLLING 
+        scroll -= 3
+    
+        # RESET THE SCROLL FRAME 
+        if abs(scroll) > bg.get_width(): 
+            scroll = 0
+        # CLOSINF THE FRAME OF SCROLLING 
+        for event in py.event.get(): 
+            if event.type == py.QUIT: 
+                quit() 
+    
+        py.display.update() 
+    
+    py.quit() 
 
 def background(bg_rect, screen_rect):
     ...
