@@ -5,7 +5,7 @@ pygame.display.set_caption("My Game")
 
 def main():
     running = True
-    background = pygame.image.load("space-background.jpg").convert()
+    background = pygame.image.load("./images/space-background.jpg").convert()
 
 # Create Rect objects for the background and screen
     bg_rect = background.get_rect()
