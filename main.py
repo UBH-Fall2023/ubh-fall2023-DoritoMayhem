@@ -4,19 +4,12 @@ window = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("My Game")
 
 def main():
-    background = pygame.image.load("./images/space-background.jpg").convert()
     running = True
-    bg_rect = background.get_rect()
-    screen_rect = window.get_rect()
-    while running:
-    # for loop through the event queue
-        for event in pygame.event.get(): # Check for QUIT event
-            if event.type == pygame.QUIT:
-                running = False
-        background()
+    background = pygame.image.load("./images/space-background.jpg").convert()
 
 # Create Rect objects for the background and screen
-    
+    bg_rect = background.get_rect()
+    screen_rect = window.get_rect()
 
 # Set the initial position of the background image
     bg_rect.bottom = screen_rect.bottom
@@ -27,7 +20,19 @@ def main():
     # Update the position of the background image
     bg_rect.bottom = screen_rect.bottom
     bg_rect.move_ip(0, 5)
-    
+    while running:
+    # for loop through the event queue
+        for event in pygame.event.get(): # Check for QUIT event
+            if event.type == pygame.QUIT:
+                running = False
+    # If the background image goes off the screen, reset its position to the top of the screen
+        window.blit(background, bg_rect)
+    # Update the position of the background image and reset image
+        bg_rect.move_ip(0, 5)
+        if bg_rect.top >= screen_rect.bottom:
+            bg_rect.bottom = 0
+        # Update the display
+        pygame.display.update()
     # calls asteroid and laser functions
     asteroid()
     laser()
@@ -38,19 +43,8 @@ def main():
 
     pygame.quit()  
 
-
-
-def background(bg_rect):
-    
-    
-    # If the background image goes off the screen, reset its position to the top of the screen
-        window.blit(background, bg_rect)
-    # Update the position of the background image and reset image
-        bg_rect.move_ip(0, 5)
-        if bg_rect.top >= screen_rect.bottom:
-            bg_rect.bottom = 0
-        # Update the display
-        pygame.display.update()
+def background(bg_rect, screen_rect):
+    ...
    # makes asteroids go boom
 def hit():
    pass
