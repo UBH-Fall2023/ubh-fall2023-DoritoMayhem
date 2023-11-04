@@ -1,9 +1,37 @@
+import random
 import pygame as py
 import math
-frameHeight = 800
-frameWidth = 600
-window = py.display.set_mode((frameHeight, frameWidth))
-py.display.set_caption("My Game")
+
+class Player(py.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = py.image.load("images/spaceship.png").convert()
+        self.rect = self.image.get_rect()
+
+    def update(self, keys):
+        if keys[py.K_UP]:
+            self.rect.y -= 5
+        if keys[py.K_DOWN]:
+            self.rect.y += 5
+        if keys[py.K_LEFT]:
+            self.rect.x -= 5
+        if keys[py.K_RIGHT]:
+            self.rect.x += 5
+
+class Asteroid(py.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = py.image.load("images/medium rock.png").convert()
+        self.rect = self.image.get_rect()
+
+    def update(self):
+        pass # Move the asteroid towards the player
+
+def background(bg_rect, screen_rect):
+    ...
+   # makes asteroids go boom
+def hit():
+   pass
 
 def main():
     py.init() 
@@ -17,7 +45,15 @@ def main():
     screen = py.display.set_mode((FrameWidth, FrameHeight))  
     bg = py.image.load("./images/space-background.jpg").convert() 
 
-    
+    player = Player()
+    asteroids = py.sprite.Group()
+
+    for _ in range(5): # Add 5 asteroids to the group
+        asteroid = Asteroid()
+        asteroid.rect.x = random.randint(0, FrameWidth)
+        asteroid.rect.y = random.randint(0, FrameHeight)
+        asteroids.add(asteroid)
+
     tiles = math.ceil(FrameWidth / bg.get_width()) + 1
     
     # MAIN LOOP 
@@ -35,6 +71,16 @@ def main():
         if abs(scroll) > bg.get_width(): 
             scroll = 0
         
+        # player handling
+        keys = py.key.get_pressed()
+        player.update(keys)
+        screen.blit(player.image, player.rect)
+
+        # Update asteroids and check for collisions
+        asteroids.update()
+        for asteroid in asteroids:
+            if py.sprite.collide_rect(player, asteroid):
+                hit() # asteroid hits the player
 
         # Close the game
         for event in py.event.get(): 
@@ -62,4 +108,4 @@ def laser():
 
 
 if __name__ == "__main__":
-   main()
+    main()
