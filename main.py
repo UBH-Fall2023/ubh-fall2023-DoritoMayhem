@@ -9,9 +9,7 @@ class Player(py.sprite.Sprite):
         super().__init__()
         self.image = py.image.load("images/spaceship.png").convert_alpha()
         self.rect = self.image.get_rect()
-        
-        self.laserList = []
-        self.maxlasers = 100
+    
     def update(self, keys):
         if keys[py.K_UP] and self.rect.y >0:
             self.rect.y -= 5
@@ -62,10 +60,7 @@ def main():
     asteroidImage = py.image.load("./images/medium rock.png").convert_alpha()
     
     player = Player()
-
     tiles = math.ceil(FrameWidth / bg.get_width()) + 1
-
-    # Initialize asteroid_add_timer outside the game loop
     asteroid_add_timer = py.time.get_ticks()
 
     # MAIN LOOP
