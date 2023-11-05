@@ -22,7 +22,19 @@ class Player(py.sprite.Sprite):
         if keys[py.K_RIGHT]:
             self.rect.x += 5
         
+class Score(object):
+    def __init__(self):
+        self.white = 255,255,255
+        self.count = 0
+        self.font = py.font.SysFont("comicsans",20, True , True)
+        self.text = self.font.render("Score : "+str(self.count),1,self.white)
 
+    def show_score(self, screen):
+        screen.blit(self.text, (0 ,0))
+
+    def score_up(self):
+        self.count += 1
+        self.text = self.font.render("Score : "+str(self.count),1,self.black)
 
    # makes asteroids go boom
 def hit():
@@ -38,13 +50,14 @@ def main():
     asteroid_add_timer = 0
     asteroid_add_interval = 1000
     scroll = 0
-
+    score = Score()
+    
     py.display.set_caption("My Game")
     screen = py.display.set_mode((FrameWidth, FrameHeight))
     bg = py.image.load("./images/space-background.jpg").convert()
     laserImage = py.image.load("./images/laser.jpg").convert_alpha()
     asteroidImage = py.image.load("./images/medium rock.png").convert_alpha()
-
+    
     player = Player()
 
     tiles = math.ceil(FrameWidth / bg.get_width()) + 1
@@ -86,13 +99,14 @@ def main():
 
         for asteroid in asteroids:
             if player.rect.colliderect(asteroid):
-                hit()  # asteroid hits the player
+                ...
+                  # asteroid hits the player
 
         # Close the game
         for event in py.event.get():
             if event.type == py.QUIT:
                 py.quit()
-            if event.type == py.KEYDOWN and event.key == py.K_SPACE:
+            if event.type == py.KEYDOWN and event.key == py.K_SPACE and len(lasers) <6:
                 # Create a new bullet at the player's position
                 laser = py.Rect(int(player.rect.x) + 100, int(player.rect.y) + 50, 10, 5)
                 lasers.append(laser)
@@ -106,16 +120,18 @@ def main():
         for asteroid in asteroids:
             screen.blit(asteroidImage, asteroid.topleft)
 
+        for asteroid in asteroids:
+            if asteroid.right < 0:
+                asteroids.remove(asteroid)
+        for laser in lasers:
+            if laser.left > 950:
+                lasers.remove(laser)
+        score.show_score(screen)
         py.display.update()
 
 
    # makes asteroids go boom
 def hit():
-   pass
-
-
-  # how the asteroid acts
-def asteroid():
    pass
 
 
