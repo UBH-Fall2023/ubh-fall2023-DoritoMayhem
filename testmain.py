@@ -1,7 +1,8 @@
 import random
 import pygame as py
 import math
-
+FrameHeight = 600
+FrameWidth = 1000
 class Player(py.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -21,24 +22,7 @@ class Player(py.sprite.Sprite):
             self.rect.x += 5
         
             
-            
-class Asteroid(py.sprite.Sprite):
-    def init(self,FrameWidth, FrameHeight):
-        super().init()
-        self.image = py.image.load("images/medium rock.png").convert_alpha()
-        self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0, 800)
-        self.rect.y = random.randint(0, 600)
-        self.speed = random.uniform(1.0, 3.0)
-        self.FrameWidth = FrameWidth
-        self.FrameHeight = FrameHeight
 
-    def update(self):
-        self.rect.x -= self.speed
-
-        if self.rect.right < 0:
-            self.rect.x = self.FrameWidth
-            self.rect.y = random.randint(0, self.FrameHeight - self.rect.height)
    # makes asteroids go boom
 def hit():
    pass
@@ -49,24 +33,23 @@ def main():
     lasers = []
     laserVelocity = 5
     
-    FrameHeight = 600
-    FrameWidth = 1000
+    
     scroll = 0
 
     py.display.set_caption("My Game") 
     screen = py.display.set_mode((FrameWidth, FrameHeight))  
     bg = py.image.load("./images/space-background.jpg").convert() 
     laserImage = py.image.load("./images/laser.jpg").convert()  
+    asteroidImage = py.image.load("./images/medium rock.png").convert() 
 
     player = Player()
-    asteroids = py.sprite.Group()
+    asteroids =[]
     
 
-    for _ in range(5): # Add 5 asteroids to the group
-        asteroid = Asteroid(FrameWidth=FrameWidth, FrameHeight = FrameHeight)
-        asteroid.rect.x = random.randint(0, FrameWidth)
-        asteroid.rect.y = random.randint(0, FrameHeight)
-        asteroids.add(asteroid)
+    for _ in range(1):
+        asteroid = py.Rect(random.randint(FrameWidth, FrameWidth + 100),
+                       random.randint(0, FrameHeight - 20), 20, 20)
+        asteroids.append(asteroid)
 
     tiles = math.ceil(FrameWidth / bg.get_width()) + 1
     
@@ -91,9 +74,9 @@ def main():
         screen.blit(player.image, player.rect)
 
         # Update asteroids and check for collisions
-        asteroids.update()
+        
         for asteroid in asteroids:
-            if py.sprite.collide_rect(player, asteroid):
+            if player.rect.colliderect(asteroid):
                 hit() # asteroid hits the player
 
         # Close the game
@@ -109,6 +92,8 @@ def main():
                 laser.x += laserVelocity
             for laser in lasers:
                 screen.blit(laserImage, laser.topleft)
+            for asteroid in asteroids:
+                screen.blit(asteroidImage, asteroid.topleft)
         py.display.update() 
     
 
