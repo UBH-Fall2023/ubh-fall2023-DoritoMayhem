@@ -122,7 +122,7 @@ def main():
         for asteroid in asteroids_to_remove:
             if asteroid in asteroids:
                 asteroids.remove(asteroid)
-            
+       
         for laser in lasers:
             laser.x += laserVelocity
         for laser in lasers:
