@@ -23,14 +23,22 @@ class Player(py.sprite.Sprite):
             
             
 class Asteroid(py.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = py.image.load("images/medium rock.png").convert()
+    def init(self,FrameWidth, FrameHeight):
+        super().init()
+        self.image = py.image.load("images/medium rock.png").convert_alpha()
         self.rect = self.image.get_rect()
+        self.rect.x = random.randint(0, 800)
+        self.rect.y = random.randint(0, 600)
+        self.speed = random.uniform(1.0, 3.0)
+        self.FrameWidth = FrameWidth
+        self.FrameHeight = FrameHeight
 
     def update(self):
-        pass # Move the asteroid towards the player
+        self.rect.x -= self.speed
 
+        if self.rect.right < 0:
+            self.rect.x = self.FrameWidth
+            self.rect.y = random.randint(0, self.FrameHeight - self.rect.height)
    # makes asteroids go boom
 def hit():
    pass
@@ -38,7 +46,7 @@ def hit():
 def main():
     py.init() 
     clock = py.time.Clock() 
-    bullets = []
+    lasers = []
     laserVelocity = 5
     
     FrameHeight = 600
@@ -48,14 +56,14 @@ def main():
     py.display.set_caption("My Game") 
     screen = py.display.set_mode((FrameWidth, FrameHeight))  
     bg = py.image.load("./images/space-background.jpg").convert() 
-    laserImage = py.image.load("./images/laser.jpg").convert()
+    laserImage = py.image.load("./images/laser.jpg").convert()  
 
     player = Player()
     asteroids = py.sprite.Group()
     
 
     for _ in range(5): # Add 5 asteroids to the group
-        asteroid = Asteroid()
+        asteroid = Asteroid(FrameWidth=FrameWidth, FrameHeight = FrameHeight)
         asteroid.rect.x = random.randint(0, FrameWidth)
         asteroid.rect.y = random.randint(0, FrameHeight)
         asteroids.add(asteroid)
@@ -94,13 +102,13 @@ def main():
                     py.quit() 
                 if event.type == py.KEYDOWN and event.key == py.K_SPACE:
                 # Create a new bullet at the player's position
-                    bullet = py.Rect(int(player.rect.x) + 100, int(player.rect.y) + 50,10,5)
-                    bullets.append(bullet)
-            bullets = [bullet for bullet in bullets if bullet.y > 0]
-            for bullet in bullets:
-                bullet.x -= laserVelocity
-            for bullet in bullets:
-                screen.blit(laserImage, bullet.topleft)
+                    laser = py.Rect(int(player.rect.x) + 100, int(player.rect.y) + 50,10,5)
+                    lasers.append(laser)
+            
+            for laser in lasers:
+                laser.x += laserVelocity
+            for laser in lasers:
+                screen.blit(laserImage, laser.topleft)
         py.display.update() 
     
 
