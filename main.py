@@ -34,7 +34,6 @@ class Score(object):
         self.count += 1
         self.text = self.font.render("Score : "+str(self.count),1,self.white)
 
-   # makes asteroids go boom
 def hit():
    pass
 
@@ -94,18 +93,16 @@ def main():
 
             # Update the asteroid_add_timer
             asteroid_add_timer = currentTime
-
-        
-                  # asteroid hits the player
-
-        # Close the game
+        # Looks for the events that are happening
         for event in py.event.get():
+            # Closes the program when exited
             if event.type == py.QUIT:
                 py.quit()
+            # Create a new bullet at the player's position with a maximum of whatever is maxlasers
             if event.type == py.KEYDOWN and event.key == py.K_SPACE and len(lasers) <maxlasers:
-                # Create a new bullet at the player's position
                 laser = py.Rect(int(player.rect.x) + 100, int(player.rect.y) + 50, 10, 5)
                 lasers.append(laser)
+        # Detects for collisions and causes its affects
         for asteroid in asteroids:
             if player.rect.colliderect(asteroid):
                 ...
