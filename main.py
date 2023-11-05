@@ -34,7 +34,7 @@ class Score(object):
 
     def score_up(self):
         self.count += 1
-        self.text = self.font.render("Score : "+str(self.count),1,self.black)
+        self.text = self.font.render("Score : "+str(self.count),1,self.white)
 
    # makes asteroids go boom
 def hit():
@@ -52,6 +52,8 @@ def main():
     scroll = 0
     score = Score()
     maxlasers =6
+    asteroids_to_remove = []
+
     
     py.display.set_caption("My Game")
     screen = py.display.set_mode((FrameWidth, FrameHeight))
@@ -92,15 +94,13 @@ def main():
         if time_elapsed >= asteroid_add_interval:
             for _ in range(2):
                 asteroid = py.Rect(random.randint(FrameWidth, FrameWidth + 100),
-                                   random.randint(0, FrameHeight - 20), 20, 20)
+                                   random.randint(0, FrameHeight - 20), 128, 128)
                 asteroids.append(asteroid)
 
             # Update the asteroid_add_timer
             asteroid_add_timer = currentTime
 
-        for asteroid in asteroids:
-            if player.rect.colliderect(asteroid):
-                ...
+        
                   # asteroid hits the player
 
         # Close the game
@@ -111,7 +111,18 @@ def main():
                 # Create a new bullet at the player's position
                 laser = py.Rect(int(player.rect.x) + 100, int(player.rect.y) + 50, 10, 5)
                 lasers.append(laser)
-
+        for asteroid in asteroids:
+            if player.rect.colliderect(asteroid):
+                ...
+            for laser in lasers:
+                if laser.colliderect(asteroid):
+                    asteroids_to_remove.append(asteroid)
+                    lasers.remove(laser)
+                    score.score_up()
+        for asteroid in asteroids_to_remove:
+            if asteroid in asteroids:
+                asteroids.remove(asteroid)
+            
         for laser in lasers:
             laser.x += laserVelocity
         for laser in lasers:
