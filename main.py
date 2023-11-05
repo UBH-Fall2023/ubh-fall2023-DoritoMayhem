@@ -7,7 +7,9 @@ class Player(py.sprite.Sprite):
         super().__init__()
         self.image = py.image.load("images/spaceship.png").convert()
         self.rect = self.image.get_rect()
-
+        self.laser = py.image.load("images/laser.jpg").convert()
+        self.laserList = []
+        self.maxlasers = 100
     def update(self, keys):
         if keys[py.K_UP]:
             self.rect.y -= 5
@@ -17,7 +19,17 @@ class Player(py.sprite.Sprite):
             self.rect.x -= 5
         if keys[py.K_RIGHT]:
             self.rect.x += 5
-
+        if keys[py.K_SPACE] and len(self.laserList)<self.maxlasers:
+            bullet = py.Rect(int(self.rect.x) + 100, int(self.rect.y) + 50,10,5)
+            self.laserList.append(bullet)
+    def handlelasers(self):
+        laserVelocity = 5
+        for laser in self.laserList:
+            laser.x += laserVelocity
+        
+        
+            
+            
 class Asteroid(py.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -27,8 +39,6 @@ class Asteroid(py.sprite.Sprite):
     def update(self):
         pass # Move the asteroid towards the player
 
-def background(bg_rect, screen_rect):
-    ...
    # makes asteroids go boom
 def hit():
    pass
@@ -47,6 +57,7 @@ def main():
 
     player = Player()
     asteroids = py.sprite.Group()
+    
 
     for _ in range(5): # Add 5 asteroids to the group
         asteroid = Asteroid()
@@ -58,7 +69,7 @@ def main():
     
     # MAIN LOOP 
     while True: 
-        # clock for the speed of the scrolling
+        # frames per second
         clock.tick(60) 
 
         # background stuff
@@ -75,7 +86,7 @@ def main():
         keys = py.key.get_pressed()
         player.update(keys)
         screen.blit(player.image, player.rect)
-
+        screen.blit(player.laser,player.rect)
         # Update asteroids and check for collisions
         asteroids.update()
         for asteroid in asteroids:
@@ -85,13 +96,12 @@ def main():
         # Close the game
         for event in py.event.get(): 
             if event.type == py.QUIT: 
-                quit() 
+                py.quit() 
     
+        
         py.display.update() 
-    py.quit() 
+    
 
-def background(bg_rect, screen_rect):
-    ...
    # makes asteroids go boom
 def hit():
    pass
@@ -103,8 +113,7 @@ def asteroid():
 
 
   # laser from spaceship and how it acts (travel route)
-def laser():
-   pass
+
 
 
 if __name__ == "__main__":
