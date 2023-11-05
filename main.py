@@ -13,13 +13,13 @@ class Player(py.sprite.Sprite):
         self.laserList = []
         self.maxlasers = 100
     def update(self, keys):
-        if keys[py.K_UP]:
+        if keys[py.K_UP] and self.rect.y >0:
             self.rect.y -= 5
-        if keys[py.K_DOWN]:
+        if keys[py.K_DOWN] and self.rect.y <500:
             self.rect.y += 5
-        if keys[py.K_LEFT]:
+        if keys[py.K_LEFT] and self.rect.x >0:
             self.rect.x -= 5
-        if keys[py.K_RIGHT]:
+        if keys[py.K_RIGHT] and self.rect.x < 900:
             self.rect.x += 5
         
 class Score(object):
@@ -51,6 +51,7 @@ def main():
     asteroid_add_interval = 1000
     scroll = 0
     score = Score()
+    maxlasers =6
     
     py.display.set_caption("My Game")
     screen = py.display.set_mode((FrameWidth, FrameHeight))
@@ -106,7 +107,7 @@ def main():
         for event in py.event.get():
             if event.type == py.QUIT:
                 py.quit()
-            if event.type == py.KEYDOWN and event.key == py.K_SPACE and len(lasers) <6:
+            if event.type == py.KEYDOWN and event.key == py.K_SPACE and len(lasers) <maxlasers:
                 # Create a new bullet at the player's position
                 laser = py.Rect(int(player.rect.x) + 100, int(player.rect.y) + 50, 10, 5)
                 lasers.append(laser)
